@@ -1,10 +1,15 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
 
+Demo-
+https://github.com/user-attachments/assets/ae45d7fb-a1d9-4b3c-b59e-4bf7883b7b04
 ## Getting Started
 
 First, run the development server:
 
 ```bash
+
+
+
 npm run dev
 # or
 yarn dev
