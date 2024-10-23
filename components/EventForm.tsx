@@ -1,13 +1,45 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
+import { format } from "date-fns";
+import { ACTION_TYPES, useEvents } from "@/context/EventsContext";
+import { UpdateEventFormProps } from "@/utils/typings";
 
 interface EventFormProps {
   selectedDate: Date;
-  addEvent: (date: Date, event: string) => void;
+  toggleDialog: () => void;
+  updateEvent: UpdateEventFormProps["onUpdate"];
 }
 
-const EventForm: React.FC<EventFormProps> = ({ selectedDate, addEvent }) => {
+const EventForm: React.FC<EventFormProps> = ({
+  selectedDate,
+  updateEvent,
+  toggleDialog,
+}) => {
+  const { state, dispatch } = useEvents();
+  const { events } = state;
   const [eventText, setEventText] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+
+  const addEvent = useCallback(
+    (date: Date, title: string) => {
+      const newEvent = {
+        id: `${new Date().toISOString()}-${title}`,
+        title,
+        date: format(date, "yyyy-MM-dd"),
+      };
+
+      dispatch({
+        type: ACTION_TYPES.ADD_EVENT,
+        event: { ...newEvent, isNew: true },
+      });
+
+      toggleDialog();
+
+      setTimeout(() => {
+        updateEvent(newEvent.id, title, undefined);
+      }, 1000);
+    },
+    [events]
+  );
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

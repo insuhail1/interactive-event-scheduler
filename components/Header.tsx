@@ -1,6 +1,11 @@
 import React from "react";
 import { format } from "date-fns";
-import { HeaderProps } from "@/utils/typings";
+
+export interface HeaderProps {
+  currentMonth: Date;
+  onNextMonth: () => void;
+  onPrevMonth: () => void;
+}
 
 const Header: React.FC<HeaderProps> = ({
   currentMonth,

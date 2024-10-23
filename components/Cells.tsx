@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   startOfMonth,
   endOfMonth,
@@ -10,16 +10,57 @@ import {
   isSameDay,
 } from "date-fns";
 import { cn } from "@/utils/cn";
-import { CellsProps, Event } from "@/utils/typings";
+import { Event } from "@/utils/typings";
+import { ACTION_TYPES, useEvents } from "@/context/EventsContext";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/Dialog";
+import EventForm from "./EventForm"; // Assuming you have an EventForm component
+import UpdateEventForm from "./UpdateEventForm";
 
-const Cells: React.FC<CellsProps> = ({
-  currentMonth,
-  events,
-  deletedEvents,
-  onDayClick,
-  onEditEvent,
-  handleDeleteEvent,
-}) => {
+interface CellsProps {
+  currentMonth: Date;
+}
+
+const Cells: React.FC<CellsProps> = ({ currentMonth }) => {
+  const { state, dispatch } = useEvents();
+  const { events, eventToUpdate } = state;
+
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null); // Store the selected day for dialog
+  const [isDialogOpen, setDialogOpen] = useState<boolean>(false); // Dialog state
+
+  const [deletedEvents, setDeletedEvents] = useState<string[]>([]);
+
+  const onDeleteEvent = (eventId: string) => {
+    dispatch({ type: ACTION_TYPES.DELETE_EVENT, id: eventId });
+  };
+
+  const onEditEvent = (event: Event) => {
+    toggleDialog();
+    dispatch({ type: ACTION_TYPES.SET_EVENT_TO_UPDATE, event });
+  };
+
+  const onDayClick = (day: Date) => {
+    setSelectedDate(day); // Set the clicked day as the selected date
+    toggleDialog();
+    dispatch({ type: ACTION_TYPES.SET_SELECTED_DATE, date: day });
+    dispatch({ type: ACTION_TYPES.CLEAR_EVENT });
+  };
+
+  const handleDeleteEvent = (eventId: string) => {
+    setDeletedEvents((prev) => [...prev, eventId]);
+    setTimeout(() => {
+      onDeleteEvent(eventId);
+    }, 500);
+  };
+
+  const updateEvent = (id: string, title: string, isNew?: boolean) => {
+    dispatch({ type: ACTION_TYPES.UPDATE_EVENT, id, title, isNew });
+    dispatch({ type: ACTION_TYPES.CLEAR_EVENT });
+  };
+
+  function toggleDialog() {
+    setDialogOpen((prev) => !prev);
+  }
+
   const generateCalendarRows = () => {
     const monthStart = startOfMonth(currentMonth);
     const monthEnd = endOfMonth(monthStart);
@@ -78,7 +119,7 @@ const Cells: React.FC<CellsProps> = ({
             : ""
         )}
         key={date.toString()}
-        onClick={() => onDayClick(date)}
+        onClick={() => onDayClick(date)} // Trigger dialog on day click
       >
         <span className="block mb-1 text-sm sm:text-base">{formattedDate}</span>
         <div className="flex flex-col gap-2">
@@ -134,6 +175,29 @@ const Cells: React.FC<CellsProps> = ({
           {week.map((dayData: any) => renderDayCell(dayData))}
         </div>
       ))}
+
+      <Dialog open={isDialogOpen} onOpenChange={toggleDialog}>
+        <DialogContent>
+          {selectedDate && !eventToUpdate && (
+            <EventForm
+              selectedDate={selectedDate}
+              updateEvent={updateEvent}
+              toggleDialog={toggleDialog}
+            />
+          )}
+
+          {eventToUpdate && (
+            <UpdateEventForm
+              event={eventToUpdate}
+              onUpdate={updateEvent}
+              onCancel={() => {
+                dispatch({ type: ACTION_TYPES.CLEAR_EVENT });
+                toggleDialog();
+              }}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
