@@ -13,7 +13,7 @@ import { cn } from "@/utils/cn";
 import { Event } from "@/utils/typings";
 import { ACTION_TYPES, useEvents } from "@/context/EventsContext";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/Dialog";
-import EventForm from "./EventForm"; // Assuming you have an EventForm component
+import EventForm from "./EventForm";
 import UpdateEventForm from "./UpdateEventForm";
 
 interface CellsProps {
@@ -25,7 +25,7 @@ const Cells: React.FC<CellsProps> = ({ currentMonth }) => {
   const { events, eventToUpdate } = state;
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(null); // Store the selected day for dialog
-  const [isDialogOpen, setDialogOpen] = useState<boolean>(false); // Dialog state
+  const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
 
   const [deletedEvents, setDeletedEvents] = useState<string[]>([]);
 
@@ -39,7 +39,7 @@ const Cells: React.FC<CellsProps> = ({ currentMonth }) => {
   };
 
   const onDayClick = (day: Date) => {
-    setSelectedDate(day); // Set the clicked day as the selected date
+    setSelectedDate(day);
     toggleDialog();
     dispatch({ type: ACTION_TYPES.SET_SELECTED_DATE, date: day });
     dispatch({ type: ACTION_TYPES.CLEAR_EVENT });
@@ -119,7 +119,7 @@ const Cells: React.FC<CellsProps> = ({ currentMonth }) => {
             : ""
         )}
         key={date.toString()}
-        onClick={() => onDayClick(date)} // Trigger dialog on day click
+        onClick={() => onDayClick(date)}
       >
         <span className="block mb-1 text-sm sm:text-base">{formattedDate}</span>
         <div className="flex flex-col gap-2">
