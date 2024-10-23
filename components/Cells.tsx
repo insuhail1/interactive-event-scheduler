@@ -12,7 +12,7 @@ import {
 import { cn } from "@/utils/cn";
 import { Event } from "@/utils/typings";
 import { ACTION_TYPES, useEvents } from "@/context/EventsContext";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/Dialog";
+import { Dialog, DialogContent } from "@/components/ui/Dialog";
 import EventForm from "./EventForm";
 import UpdateEventForm from "./UpdateEventForm";
 

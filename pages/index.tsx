@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
 
 import Calendar from "@/components/Calendar";
-import EventForm from "@/components/EventForm";
-import UpdateEventForm from "@/components/UpdateEventForm";
 import { Event } from "@/utils/typings";
 import {
   ACTION_TYPES,
@@ -13,9 +11,7 @@ import { GetServerSideProps } from "next";
 import { generateRandomEvents } from "@/utils/helper";
 
 const HomePage: React.FC<{ serverEvents: Event[] }> = ({ serverEvents }) => {
-  const { state, dispatch } = useEvents();
-
-  const { selectedDate, eventToUpdate } = state;
+  const { dispatch } = useEvents();
 
   // Add server-side generated events to the event context when the component is mounted
   useEffect(() => {

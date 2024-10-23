@@ -14,8 +14,7 @@ const EventForm: React.FC<EventFormProps> = ({
   updateEvent,
   toggleDialog,
 }) => {
-  const { state, dispatch } = useEvents();
-  const { events } = state;
+  const { dispatch } = useEvents();
   const [eventText, setEventText] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -38,7 +37,7 @@ const EventForm: React.FC<EventFormProps> = ({
         updateEvent(newEvent.id, title, undefined);
       }, 1000);
     },
-    [events]
+    [dispatch, toggleDialog, updateEvent]
   );
 
   const handleSubmit = (e: React.FormEvent) => {

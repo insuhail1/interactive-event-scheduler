@@ -1,3 +1,30 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "next/core-web-vitals"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": true
+  },
+  "plugins": [
+    "react",
+    "@typescript-eslint" // Include TypeScript ESLint plugin
+  ],
+  "rules": {
+    "react/react-in-jsx-scope": "off", // Not needed with Next.js
+    "react/prop-types": "off", // Disable prop-types as we use TypeScript
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        "vars": "all",
+        "args": "after-used",
+        "ignoreRestSiblings": true,
+        "argsIgnorePattern": "^_", // Ignore parameters that start with an underscore
+        "varsIgnorePattern": "^EnumName$" // Ignore specific enum names if needed
+      }
+    ]
+    // Add any other rules you want to enforce or adjust
+  }
 }
