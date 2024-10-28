@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Suspense, lazy } from "react";
 import {
   startOfMonth,
   endOfMonth,
@@ -13,8 +13,10 @@ import { cn } from "@/utils/cn";
 import { Event } from "@/utils/typings";
 import { ACTION_TYPES, useEvents } from "@/context/EventsContext";
 import { Dialog, DialogContent } from "@/components/ui/Dialog";
-import EventForm from "./EventForm";
-import UpdateEventForm from "./UpdateEventForm";
+import { Spinner } from "@/components/ui/Spinner";
+
+const EventForm = lazy(() => import("./EventForm"));
+const UpdateEventForm = lazy(() => import("./UpdateEventForm"));
 
 interface CellsProps {
   currentMonth: Date;
@@ -26,7 +28,6 @@ const Cells: React.FC<CellsProps> = ({ currentMonth }) => {
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(null); // Store the selected day for dialog
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
-
   const [deletedEvents, setDeletedEvents] = useState<string[]>([]);
 
   const onDeleteEvent = (eventId: string) => {
@@ -72,16 +73,13 @@ const Cells: React.FC<CellsProps> = ({ currentMonth }) => {
 
     while (day <= endDate) {
       const daysInWeek: any[] = [];
-
       for (let i = 0; i < 7; i++) {
         const dayData = createDayData(day, monthStart);
         daysInWeek.push(dayData);
         day = addDays(day, 1);
       }
-
       rows.push(daysInWeek);
     }
-
     return rows;
   };
 
@@ -89,7 +87,6 @@ const Cells: React.FC<CellsProps> = ({ currentMonth }) => {
     const formattedDate = format(day, "d");
     const isCurrentMonth = isSameMonth(day, monthStart);
     const isToday = isSameDay(day, new Date());
-
     const dayEvents = getEventsForDay(day);
 
     return {
@@ -177,25 +174,26 @@ const Cells: React.FC<CellsProps> = ({ currentMonth }) => {
       ))}
 
       <Dialog open={isDialogOpen} onOpenChange={toggleDialog}>
-        <DialogContent>
-          {selectedDate && !eventToUpdate && (
-            <EventForm
-              selectedDate={selectedDate}
-              updateEvent={updateEvent}
-              toggleDialog={toggleDialog}
-            />
-          )}
-
-          {eventToUpdate && (
-            <UpdateEventForm
-              event={eventToUpdate}
-              onUpdate={updateEvent}
-              onCancel={() => {
-                dispatch({ type: ACTION_TYPES.CLEAR_EVENT });
-                toggleDialog();
-              }}
-            />
-          )}
+        <DialogContent className="min-h-[200px]">
+          <Suspense fallback={<Spinner />}>
+            {selectedDate && !eventToUpdate && (
+              <EventForm
+                selectedDate={selectedDate}
+                updateEvent={updateEvent}
+                toggleDialog={toggleDialog}
+              />
+            )}
+            {eventToUpdate && (
+              <UpdateEventForm
+                event={eventToUpdate}
+                onUpdate={updateEvent}
+                onCancel={() => {
+                  dispatch({ type: ACTION_TYPES.CLEAR_EVENT });
+                  toggleDialog();
+                }}
+              />
+            )}
+          </Suspense>
         </DialogContent>
       </Dialog>
     </div>
