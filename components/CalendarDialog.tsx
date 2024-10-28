@@ -2,6 +2,7 @@ import React, { Suspense } from "react";
 import { Dialog, DialogContent } from "@/components/ui/Dialog";
 import { Spinner } from "@/components/ui/Spinner";
 import { Event } from "@/utils/typings";
+import { DialogTitle } from "@radix-ui/react-dialog";
 
 const EventForm = React.lazy(() => import("./EventForm"));
 const UpdateEventForm = React.lazy(() => import("./UpdateEventForm"));
@@ -25,7 +26,8 @@ const CalendarDialog: React.FC<CalendarDialogProps> = ({
 }) => {
   return (
     <Dialog open={isDialogOpen} onOpenChange={toggleDialog}>
-      <DialogContent className="min-h-[200px]">
+      <DialogContent className="min-h-[200px]" aria-describedby="dialog">
+        <DialogTitle title={eventToUpdate ? "Update" : "Create"} />
         <Suspense fallback={<Spinner />}>
           {selectedDate && !eventToUpdate && (
             <EventForm

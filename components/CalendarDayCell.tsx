@@ -4,7 +4,13 @@ import EventItem from "./EventItem";
 import { cn } from "@/utils/cn";
 
 interface CalendarDayCellProps {
-  dayData: any;
+  dayData: {
+    events: Event[];
+    isToday: boolean;
+    date: Date;
+    formattedDate: string;
+    isCurrentMonth: boolean;
+  };
   onDayClick: (date: Date) => void;
   onDeleteEvent: (id: string) => void;
   onEditEvent: (event: Event, e: React.MouseEvent) => void;
