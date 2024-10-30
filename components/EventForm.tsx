@@ -2,6 +2,8 @@ import React, { useState, useCallback } from "react";
 import { format } from "date-fns";
 import { ACTION_TYPES, useEvents } from "@/context/EventsContext";
 import { UpdateEventFormProps } from "@/utils/typings";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
 
 interface EventFormProps {
   selectedDate: Date;
@@ -37,7 +39,7 @@ const EventForm: React.FC<EventFormProps> = ({
         updateEvent(newEvent.id, title, undefined);
       }, 1000);
     },
-    [dispatch, toggleDialog, updateEvent]
+    [dispatch, toggleDialog, updateEvent],
   );
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -54,25 +56,23 @@ const EventForm: React.FC<EventFormProps> = ({
 
   return (
     <form onSubmit={handleSubmit} className="mt-4">
-      <h3 className="text-lg font-semibold mb-2">
+      <h3 className="mb-2 text-lg font-semibold">
         Add Event for {selectedDate.toLocaleDateString()}
       </h3>
-      <input
+      <Input
         type="text"
         placeholder="Event description"
         value={eventText}
         onChange={(e) => setEventText(e.target.value)}
-        className="border p-2 rounded w-full mb-4"
+        className="mb-4 w-full rounded border p-2"
       />
-      <button
+      <Button
         type="submit"
-        className={`bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 ${
-          loading ? "opacity-50 cursor-not-allowed" : ""
-        }`}
-        disabled={loading}
+        disabled={loading || !eventText}
+        className="w-full sm:w-max"
       >
-        {loading ? "Adding..." : "Add Event"}{" "}
-      </button>
+        {loading ? "Adding..." : "Add Event"}
+      </Button>
     </form>
   );
 };

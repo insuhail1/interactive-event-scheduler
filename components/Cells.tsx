@@ -33,12 +33,12 @@ const Cells: React.FC<{ currentMonth: Date }> = ({ currentMonth }) => {
 
   const getEventsForDay = useCallback(
     (day: Date) => eventsByDate.get(format(day, "yyyy-MM-dd")) || [],
-    [eventsByDate]
+    [eventsByDate],
   );
 
   const clearEvent = useCallback(
     () => dispatch({ type: ACTION_TYPES.CLEAR_EVENT }),
-    [dispatch]
+    [dispatch],
   );
 
   const toggleDialog = useCallback(() => setDialogOpen((prev) => !prev), []);
@@ -50,18 +50,18 @@ const Cells: React.FC<{ currentMonth: Date }> = ({ currentMonth }) => {
       dispatch({ type: ACTION_TYPES.SET_SELECTED_DATE, date: day });
       dispatch({ type: ACTION_TYPES.CLEAR_EVENT });
     },
-    [dispatch, toggleDialog]
+    [dispatch, toggleDialog],
   );
 
-  const handleDeleteEvent = useCallback(
+  const onDeleteEvent = useCallback(
     (eventId: string) => {
       setDeletedEvents((prev) => [...prev, eventId]);
       setTimeout(
         () => dispatch({ type: ACTION_TYPES.DELETE_EVENT, id: eventId }),
-        500
+        500,
       );
     },
-    [dispatch]
+    [dispatch],
   );
 
   const updateEvent = useCallback(
@@ -69,7 +69,7 @@ const Cells: React.FC<{ currentMonth: Date }> = ({ currentMonth }) => {
       dispatch({ type: ACTION_TYPES.UPDATE_EVENT, id, title, isNew });
       dispatch({ type: ACTION_TYPES.CLEAR_EVENT });
     },
-    [dispatch]
+    [dispatch],
   );
 
   const calendarRows = useMemo(() => {
@@ -91,7 +91,7 @@ const Cells: React.FC<{ currentMonth: Date }> = ({ currentMonth }) => {
           };
           day = addDays(day, 1);
           return dayData;
-        })
+        }),
       );
     }
     return rows;
@@ -109,7 +109,6 @@ const Cells: React.FC<{ currentMonth: Date }> = ({ currentMonth }) => {
               key={dayData.date.toString()}
               dayData={dayData}
               onDayClick={onDayClick}
-              onDeleteEvent={handleDeleteEvent}
               onEditEvent={(event, e) => {
                 e.stopPropagation();
                 dispatch({ type: ACTION_TYPES.SET_EVENT_TO_UPDATE, event });
@@ -124,6 +123,7 @@ const Cells: React.FC<{ currentMonth: Date }> = ({ currentMonth }) => {
         isDialogOpen={isDialogOpen}
         toggleDialog={toggleDialog}
         selectedDate={selectedDate}
+        onDeleteEvent={onDeleteEvent}
         eventToUpdate={eventToUpdate}
         updateEvent={updateEvent}
         clearEvent={clearEvent}

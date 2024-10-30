@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useCallback } from "react";
 import { Dialog, DialogContent } from "@/components/ui/Dialog";
 import { Spinner } from "@/components/ui/Spinner";
 import { Event } from "@/utils/typings";
@@ -14,6 +14,7 @@ interface CalendarDialogProps {
   eventToUpdate: Event | null;
   updateEvent: (id: string, title: string, isNew?: boolean) => void;
   clearEvent: () => void;
+  onDeleteEvent: (id: string) => void;
 }
 
 const CalendarDialog: React.FC<CalendarDialogProps> = ({
@@ -23,7 +24,13 @@ const CalendarDialog: React.FC<CalendarDialogProps> = ({
   eventToUpdate,
   updateEvent,
   clearEvent,
+  onDeleteEvent,
 }) => {
+  const handleCancel = useCallback(() => {
+    clearEvent();
+    toggleDialog();
+  }, [clearEvent, toggleDialog]);
+
   return (
     <Dialog open={isDialogOpen} onOpenChange={toggleDialog}>
       <DialogContent className="min-h-[200px]" aria-describedby="dialog">
@@ -40,10 +47,8 @@ const CalendarDialog: React.FC<CalendarDialogProps> = ({
             <UpdateEventForm
               event={eventToUpdate}
               onUpdate={updateEvent}
-              onCancel={() => {
-                clearEvent();
-                toggleDialog();
-              }}
+              onDeleteEvent={onDeleteEvent}
+              onCancel={handleCancel}
             />
           )}
         </Suspense>

@@ -1,10 +1,13 @@
 import { UpdateEventFormProps } from "@/utils/typings";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
 
 const UpdateEventForm: React.FC<UpdateEventFormProps> = ({
   event,
   onUpdate,
   onCancel,
+  onDeleteEvent,
 }) => {
   const [title, setTitle] = useState(event.title);
   const [loading, setLoading] = useState<boolean>(false);
@@ -24,25 +27,42 @@ const UpdateEventForm: React.FC<UpdateEventFormProps> = ({
     }
   };
 
+  const handleDelete = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      onCancel();
+      onDeleteEvent(event.id);
+    },
+    [event.id, onDeleteEvent, onCancel],
+  );
+
   return (
     <form onSubmit={handleSubmit} className="mb-4">
-      <h3 className="text-lg font-semibold mb-2">
+      <h3 className="mb-2 text-lg font-semibold">
         Update {event.title} Date: {new Date(event.date).toLocaleDateString()}
       </h3>
-      <input
+      <Input
         type="text"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        className="border rounded p-2 mr-2 w-full"
+        className="mr-2 w-full rounded border p-2"
         required
       />
-      <button
+      <Button
         type="submit"
         disabled={loading}
-        className="px-4 mt-4 py-2 bg-green-500 text-white rounded hover:bg-green-700"
+        className="mt-4 w-full bg-green-500 hover:bg-green-700 sm:w-max"
       >
         {loading ? "Updating..." : "Update Event"}
-      </button>
+      </Button>
+
+      <Button
+        onClick={handleDelete}
+        className="ml-2 w-full text-red-500 hover:text-red-700 sm:w-max"
+        variant="destructive"
+      >
+        X Delete
+      </Button>
     </form>
   );
 };

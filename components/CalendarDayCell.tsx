@@ -12,7 +12,6 @@ interface CalendarDayCellProps {
     isCurrentMonth: boolean;
   };
   onDayClick: (date: Date) => void;
-  onDeleteEvent: (id: string) => void;
   onEditEvent: (event: Event, e: React.MouseEvent) => void;
   deletedEvents: string[];
 }
@@ -20,7 +19,6 @@ interface CalendarDayCellProps {
 const CalendarDayCell: React.FC<CalendarDayCellProps> = ({
   dayData,
   onDayClick,
-  onDeleteEvent,
   onEditEvent,
   deletedEvents,
 }) => {
@@ -29,23 +27,22 @@ const CalendarDayCell: React.FC<CalendarDayCellProps> = ({
   return (
     <div
       className={cn(
-        "p-2 border hover:bg-gray-100 text-center",
+        "border p-2 text-center hover:bg-gray-100",
         !isCurrentMonth
           ? "text-gray-400"
           : isToday
-          ? "bg-blue-200 font-bold"
-          : ""
+            ? "bg-blue-200 font-bold"
+            : "",
       )}
       onClick={() => onDayClick(date)}
     >
-      <span className="block mb-1 text-sm sm:text-base">{formattedDate}</span>
+      <span className="mb-1 block text-sm sm:text-base">{formattedDate}</span>
       <div className="flex flex-col gap-2">
         {events.map((event: Event) => (
           <EventItem
             key={event.id}
             event={event}
             isDeleted={deletedEvents.includes(event.id)}
-            onDelete={onDeleteEvent}
             onEdit={onEditEvent}
           />
         ))}
