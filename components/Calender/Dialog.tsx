@@ -4,8 +4,8 @@ import { Spinner } from "@/components/ui/Spinner";
 import { Event } from "@/utils/typings";
 import { DialogTitle } from "@radix-ui/react-dialog";
 
-const EventForm = React.lazy(() => import("./EventForm"));
-const UpdateEventForm = React.lazy(() => import("./UpdateEventForm"));
+const EventForm = React.lazy(() => import("../Event/CreateForm"));
+const UpdateEventForm = React.lazy(() => import("../Event/UpdateForm"));
 
 interface CalendarDialogProps {
   isDialogOpen: boolean;

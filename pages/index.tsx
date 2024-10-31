@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-import Calendar from "@/components/Calendar";
+import Calendar from "@/components/Calender";
 import { Event } from "@/utils/typings";
 import {
   ACTION_TYPES,
@@ -16,13 +16,13 @@ const HomePage: React.FC<{ serverEvents: Event[] }> = ({ serverEvents }) => {
   // Add server-side generated events to the event context when the component is mounted
   useEffect(() => {
     serverEvents.forEach((event) =>
-      dispatch({ type: ACTION_TYPES.ADD_EVENT, event })
+      dispatch({ type: ACTION_TYPES.ADD_EVENT, event }),
     );
   }, [serverEvents, dispatch]);
 
   return (
-    <div className="max-w-5xl mx-auto p-4">
-      <h1 className="text-4xl font-bold mb-6 text-center">
+    <div className="mx-auto max-w-5xl p-4">
+      <h1 className="mb-6 text-center text-4xl font-bold">
         Interactive Event Scheduler
       </h1>
       <Calendar />

@@ -10,8 +10,8 @@ import {
   isSameDay,
 } from "date-fns";
 import { ACTION_TYPES, useEvents } from "@/context/EventsContext";
-import CalendarDayCell from "./CalendarDayCell";
-import CalendarDialog from "./CalendarDialog";
+import CalendarDayCell from "./Cell";
+import CalendarDialog from "./Dialog";
 
 const Cells: React.FC<{ currentMonth: Date }> = ({ currentMonth }) => {
   const { state, dispatch } = useEvents();

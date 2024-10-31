@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { addMonths, subMonths } from "date-fns";
 
 import Header from "./Header";
-import Days from "./Days";
+import Days from "./DaysName";
 import Cells from "./Cells";
 
 const Calendar: React.FC = () => {
