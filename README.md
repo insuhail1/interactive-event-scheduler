@@ -2,50 +2,6 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 Demo- [Website](https://interactive-event-scheduler.vercel.app)
 
-## Folder structure
-
-.
-├── README.md
-├── components
-│ ├── Calender
-│ │ ├── Cell.tsx
-│ │ ├── Cells.tsx
-│ │ ├── DaysName.tsx
-│ │ ├── Dialog.tsx
-│ │ ├── Header.tsx
-│ │ └── index.tsx
-│ ├── Event
-│ │ ├── CreateForm.tsx
-│ │ ├── Item.tsx
-│ │ └── UpdateForm.tsx
-│ └── ui
-│ ├── Button.tsx
-│ ├── Dialog.tsx
-│ ├── Input.tsx
-│ └── Spinner.tsx
-├── components.json
-├── context
-│ └── EventsContext.tsx
-├── next-env.d.ts
-├── next.config.ts
-├── package-lock.json
-├── package.json
-├── pages
-│ ├── \_app.tsx
-│ └── index.tsx
-├── postcss.config.mjs
-├── styles
-│ └── globals.css
-├── tailwind.config.ts
-├── tsconfig.json
-├── types
-└── utils
-├── cn.ts
-├── helper.ts
-└── typings.ts
-
-10 directories, 29 files
-
 ## Getting Started
 
 First, run the development server:
