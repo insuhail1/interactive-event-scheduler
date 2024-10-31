@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
 import Calendar from "@/components/Calender";
-import { Event } from "@/utils/typings";
+import { Event } from "@/typings/event";
 import {
   ACTION_TYPES,
   EventsProvider,

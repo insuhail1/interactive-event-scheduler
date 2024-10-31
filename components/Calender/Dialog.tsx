@@ -1,11 +1,13 @@
 import React, { Suspense, useCallback } from "react";
 import { Dialog, DialogContent } from "@/components/ui/Dialog";
 import { Spinner } from "@/components/ui/Spinner";
-import { Event } from "@/utils/typings";
+import { Event } from "@/typings/event";
 import { DialogTitle } from "@radix-ui/react-dialog";
 
-const EventForm = React.lazy(() => import("../Event/CreateForm"));
-const UpdateEventForm = React.lazy(() => import("../Event/UpdateForm"));
+const EventForm = React.lazy(() => import("@/components/Event/CreateForm"));
+const UpdateEventForm = React.lazy(
+  () => import("@/components/Event/UpdateForm"),
+);
 
 interface CalendarDialogProps {
   isDialogOpen: boolean;

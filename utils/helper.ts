@@ -1,5 +1,5 @@
 import { format, addDays } from "date-fns";
-import { Event } from "./typings";
+import { Event } from "@/typings/event";
 
 export const generateRandomEvents = (numEvents: number) => {
   const events: Event[] = [];

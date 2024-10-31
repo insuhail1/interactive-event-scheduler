@@ -1,4 +1,4 @@
-import { UpdateEventFormProps } from "@/utils/typings";
+import { UpdateEventFormProps } from "@/typings/event";
 import React, { useCallback, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";

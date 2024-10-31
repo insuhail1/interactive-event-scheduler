@@ -1,5 +1,5 @@
 import React from "react";
-import { Event } from "@/utils/typings";
+import { Event } from "@/typings/event";
 import { cn } from "@/utils/cn";
 
 interface EventItemProps {

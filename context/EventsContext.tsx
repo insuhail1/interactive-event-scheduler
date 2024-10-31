@@ -4,7 +4,7 @@ import React, {
   useContext,
   PropsWithChildren,
 } from "react";
-import { Event } from "@/utils/typings";
+import { Event } from "@/typings/event";
 
 type State = {
   events: Event[];
@@ -59,7 +59,7 @@ const eventReducer = (state: State, action: Action): State => {
                 title: action.title,
                 isNew: action.isNew,
               }
-            : event
+            : event,
         ),
       };
     case ACTION_TYPES.SET_SELECTED_DATE:

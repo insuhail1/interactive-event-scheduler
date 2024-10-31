@@ -1,6 +1,6 @@
 import React from "react";
-import { Event } from "@/utils/typings";
-import EventItem from "../Event/Item";
+import { Event } from "@/typings/event";
+import EventItem from "@/components/Event/Item";
 import { cn } from "@/utils/cn";
 
 interface CalendarDayCellProps {
