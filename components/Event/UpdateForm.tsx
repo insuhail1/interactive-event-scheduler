@@ -1,7 +1,9 @@
-import { UpdateEventFormProps } from "@/typings/event";
 import React, { useCallback, useState } from "react";
+
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+
+import { UpdateEventFormProps } from "@/typings/event";
 
 const UpdateEventForm: React.FC<UpdateEventFormProps> = ({
   event,

@@ -1,4 +1,5 @@
 import React from "react";
+
 import { Event } from "@/typings/event";
 import EventItem from "@/components/Event/Item";
 import { cn } from "@/utils/cn";

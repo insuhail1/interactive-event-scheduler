@@ -1,6 +1,7 @@
 import React from "react";
-import { Button } from "@/components/ui/Button";
 import { startOfWeek, addDays, format } from "date-fns";
+
+import { Button } from "@/components/ui/Button";
 
 interface HeaderProps {
   currentMonth: Date;
@@ -17,7 +18,7 @@ const Header: React.FC<HeaderProps> = ({
   const startDate = startOfWeek(new Date());
 
   return (
-    <div className="my-4">
+    <div className="my-4" id="header">
       <div className="flex items-center justify-between">
         <Button
           onClick={onPrevMonth}

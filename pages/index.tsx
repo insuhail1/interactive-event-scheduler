@@ -1,14 +1,15 @@
 import React, { useEffect } from "react";
+import { GetServerSideProps } from "next";
 
-import Calendar from "@/components/Calender";
-import { Event } from "@/typings/event";
 import {
   ACTION_TYPES,
   EventsProvider,
   useEvents,
 } from "@/context/EventsContext";
-import { GetServerSideProps } from "next";
+
+import Calendar from "@/components/Calender";
 import { generateRandomEvents } from "@/utils/helper";
+import { Event } from "@/typings/event";
 
 const HomePage: React.FC<{ serverEvents: Event[] }> = ({ serverEvents }) => {
   const { dispatch } = useEvents();
@@ -21,7 +22,7 @@ const HomePage: React.FC<{ serverEvents: Event[] }> = ({ serverEvents }) => {
   }, [serverEvents, dispatch]);
 
   return (
-    <div className="m-2 mx-auto p-2 md:p-4">
+    <div className="mx-auto px-2 md:px-4">
       <Calendar />
     </div>
   );

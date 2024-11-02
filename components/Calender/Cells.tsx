@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback, useEffect } from "react";
 import {
   startOfMonth,
   endOfMonth,
@@ -9,13 +9,27 @@ import {
   isSameMonth,
   isSameDay,
 } from "date-fns";
+
 import { ACTION_TYPES, useEvents } from "@/context/EventsContext";
+
 import CalendarDayCell from "./Cell";
 import CalendarDialog from "./Dialog";
 
 const Cells: React.FC<{ currentMonth: Date }> = ({ currentMonth }) => {
   const { state, dispatch } = useEvents();
   const { events, eventToUpdate } = state;
+
+  const [rowHeight, setRowHeight] = useState("auto");
+
+  useEffect(() => {
+    const headerElement = document.getElementById("header");
+    if (headerElement) {
+      const headerHeight = headerElement.clientHeight;
+      const availableHeight = window.innerHeight - headerHeight;
+      const calculatedRowHeight = availableHeight / 5;
+      setRowHeight(`${calculatedRowHeight - 10}px`);
+    }
+  }, []);
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [isDialogOpen, setDialogOpen] = useState(false);
@@ -98,24 +112,31 @@ const Cells: React.FC<{ currentMonth: Date }> = ({ currentMonth }) => {
   }, [currentMonth, getEventsForDay]);
 
   return (
-    <div className="flex h-[80vh] flex-col">
-      {calendarRows.map((week, index) => (
-        <div className="grid flex-1 grid-cols-7" key={index}>
-          {week.map((dayData) => (
-            <CalendarDayCell
-              key={dayData.date.toString()}
-              dayData={dayData}
-              onDayClick={onDayClick}
-              onEditEvent={(event, e) => {
-                e.stopPropagation();
-                dispatch({ type: ACTION_TYPES.SET_EVENT_TO_UPDATE, event });
-                toggleDialog();
-              }}
-              deletedEvents={deletedEvents}
-            />
-          ))}
-        </div>
-      ))}
+    <>
+      <div className="flex flex-1 flex-col">
+        {calendarRows.map((week, index) => (
+          <div
+            className="grid grid-cols-7"
+            key={index}
+            style={{ height: rowHeight }}
+          >
+            {week.map((dayData) => (
+              <CalendarDayCell
+                key={dayData.date.toString()}
+                dayData={dayData}
+                onDayClick={onDayClick}
+                onEditEvent={(event, e) => {
+                  e.stopPropagation();
+                  dispatch({ type: ACTION_TYPES.SET_EVENT_TO_UPDATE, event });
+                  toggleDialog();
+                }}
+                deletedEvents={deletedEvents}
+              />
+            ))}
+          </div>
+        ))}
+      </div>
+
       <CalendarDialog
         isDialogOpen={isDialogOpen}
         toggleDialog={toggleDialog}
@@ -125,7 +146,7 @@ const Cells: React.FC<{ currentMonth: Date }> = ({ currentMonth }) => {
         updateEvent={updateEvent}
         clearEvent={clearEvent}
       />
-    </div>
+    </>
   );
 };
 

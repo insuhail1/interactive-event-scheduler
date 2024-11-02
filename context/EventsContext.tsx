@@ -4,6 +4,7 @@ import React, {
   useContext,
   PropsWithChildren,
 } from "react";
+
 import { Event } from "@/typings/event";
 
 type State = {
