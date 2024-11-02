@@ -98,12 +98,9 @@ const Cells: React.FC<{ currentMonth: Date }> = ({ currentMonth }) => {
   }, [currentMonth, getEventsForDay]);
 
   return (
-    <div>
+    <div className="flex h-[80vh] flex-col">
       {calendarRows.map((week, index) => (
-        <div
-          className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7"
-          key={index}
-        >
+        <div className="grid flex-1 grid-cols-7" key={index}>
           {week.map((dayData) => (
             <CalendarDayCell
               key={dayData.date.toString()}

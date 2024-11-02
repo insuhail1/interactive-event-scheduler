@@ -21,10 +21,7 @@ const HomePage: React.FC<{ serverEvents: Event[] }> = ({ serverEvents }) => {
   }, [serverEvents, dispatch]);
 
   return (
-    <div className="mx-auto max-w-5xl p-4">
-      <h1 className="mb-6 text-center text-4xl font-bold">
-        Interactive Event Scheduler
-      </h1>
+    <div className="m-2 mx-auto p-2 md:p-4">
       <Calendar />
     </div>
   );
