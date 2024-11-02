@@ -28,7 +28,7 @@ const CalendarDayCell: React.FC<CalendarDayCellProps> = ({
   return (
     <div
       className={cn(
-        "min-h-24 border p-2 text-center hover:bg-gray-100",
+        "min-h-24 overflow-scroll border p-2 text-center hover:bg-gray-100",
         !isCurrentMonth
           ? "text-gray-400"
           : isToday
