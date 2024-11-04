@@ -1,30 +1,20 @@
-import { takeLatest, delay, call } from "redux-saga/effects";
-import { addEvent, deleteEvent, updateEvent } from "@/store/slices/eventSlice";
+import { takeLatest, put, delay } from "redux-saga/effects";
+import { addEvent, addEventStart } from "@/store/slices/eventSlice";
 
-function* simulateAsyncTask() {
+function* handleAddEvent(action: ReturnType<typeof addEvent>) {
   try {
+    const { payload } = action;
+
+    addEvent(payload);
+    yield put(addEvent(payload));
     yield delay(500);
   } catch (error) {
-    console.error("Async task failed:", error);
+    console.error("Failed to add event:", error);
   }
 }
 
-function* handleAddEvent() {
-  yield call(simulateAsyncTask);
-}
-
-function* handleDeleteEvent() {
-  yield call(simulateAsyncTask);
-}
-
-function* handleUpdateEvent() {
-  yield call(simulateAsyncTask);
-}
-
 function* watchEventActions() {
-  yield takeLatest(addEvent.type, handleAddEvent);
-  yield takeLatest(deleteEvent.type, handleDeleteEvent);
-  yield takeLatest(updateEvent.type, handleUpdateEvent);
+  yield takeLatest(addEventStart.type, handleAddEvent);
 }
 
 export default watchEventActions;

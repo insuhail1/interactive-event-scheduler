@@ -2,12 +2,14 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Event } from "@/typings/event";
 
 type State = {
+  loading: boolean;
   events: Event[];
   selectedDate: string | null;
   eventToUpdate: Event | null;
 };
 
 const initialState: State = {
+  loading: false,
   events: [],
   selectedDate: null,
   eventToUpdate: null,
@@ -17,8 +19,13 @@ const eventSlice = createSlice({
   name: "events",
   initialState,
   reducers: {
+    // eslint-disable-next-line no-unused-vars
+    addEventStart(state, _action: PayloadAction<Event>) {
+      state.loading = true;
+    },
     addEvent(state, action: PayloadAction<Event>) {
       state.events.push(action.payload);
+      state.loading = false;
     },
     addEvents(state, action: PayloadAction<Event[]>) {
       state.events = action.payload;
@@ -54,6 +61,7 @@ const eventSlice = createSlice({
 export const {
   addEvent,
   addEvents,
+  addEventStart,
   deleteEvent,
   updateEvent,
   setSelectedDate,

@@ -4,7 +4,7 @@ import { format } from "date-fns";
 import { UpdateEventFormProps } from "@/typings/event";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { addEvent } from "@/store/slices/eventSlice";
+import { addEventStart } from "@/store/slices/eventSlice";
 import { useDispatch } from "react-redux";
 
 interface EventFormProps {
@@ -29,7 +29,7 @@ const EventForm: React.FC<EventFormProps> = ({
       date: format(date, "yyyy-MM-dd"),
     };
 
-    dispatch(addEvent({ ...newEvent, isNew: true }));
+    dispatch(addEventStart({ ...newEvent, isNew: true }));
 
     toggleDialog();
 
