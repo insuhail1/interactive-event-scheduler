@@ -1,10 +1,11 @@
 import React, { useEffect, useRef } from "react";
 import { GetServerSideProps } from "next";
+import { useDispatch } from "react-redux";
+
 import Calendar from "@/components/Calender";
 import { generateRandomEvents } from "@/utils/helper";
 import { Event } from "@/typings/event";
-import { addEvent } from "@/store/slices/eventSlice";
-import { useDispatch } from "react-redux";
+import { addEvents } from "@/store/slices/eventSlice";
 
 const HomePage: React.FC<{ serverEvents: Event[] }> = ({ serverEvents }) => {
   const dispatch = useDispatch();
@@ -12,7 +13,7 @@ const HomePage: React.FC<{ serverEvents: Event[] }> = ({ serverEvents }) => {
 
   useEffect(() => {
     if (!hasRun.current) {
-      serverEvents.forEach((event) => dispatch(addEvent(event)));
+      dispatch(addEvents(serverEvents));
       hasRun.current = true;
     }
   }, [serverEvents, dispatch]);

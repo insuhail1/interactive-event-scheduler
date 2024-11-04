@@ -20,6 +20,9 @@ const eventSlice = createSlice({
     addEvent(state, action: PayloadAction<Event>) {
       state.events.push(action.payload);
     },
+    addEvents(state, action: PayloadAction<Event[]>) {
+      state.events = action.payload;
+    },
     deleteEvent(state, action: PayloadAction<string>) {
       state.events = state.events.filter(
         (event) => event.id !== action.payload,
@@ -50,6 +53,7 @@ const eventSlice = createSlice({
 
 export const {
   addEvent,
+  addEvents,
   deleteEvent,
   updateEvent,
   setSelectedDate,
