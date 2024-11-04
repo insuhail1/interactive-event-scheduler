@@ -2,7 +2,7 @@ import createSagaMiddleware from "redux-saga";
 import { configureStore } from "@reduxjs/toolkit";
 
 import rootReducer from "@/store/rootReducer";
-import rootsaga from "@/store/sagas/rootsaga";
+import rootSaga from "@/store/sagas";
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -12,7 +12,7 @@ const store = configureStore({
     getDefaultMiddleware().concat(sagaMiddleware),
 });
 
-sagaMiddleware.run(rootsaga);
+sagaMiddleware.run(rootSaga);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
