@@ -9,15 +9,25 @@ import {
   isSameMonth,
   isSameDay,
 } from "date-fns";
-
-import { ACTION_TYPES, useEvents } from "@/context/EventsContext";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store";
+import {
+  setSelectedDate,
+  clearEvent,
+  deleteEvent,
+  updateEvent,
+  setEventToUpdate,
+} from "@/store/slices/eventSlice";
 
 import CalendarDayCell from "./Cell";
 import CalendarDialog from "./Dialog";
 
 const Cells: React.FC<{ currentMonth: Date }> = ({ currentMonth }) => {
-  const { state, dispatch } = useEvents();
-  const { events, eventToUpdate } = state;
+  const dispatch = useDispatch();
+  const events = useSelector((state: RootState) => state.event.events);
+  const eventToUpdate = useSelector(
+    (state: RootState) => state.event.eventToUpdate,
+  );
 
   const [rowHeight, setRowHeight] = useState("auto");
 
@@ -31,7 +41,6 @@ const Cells: React.FC<{ currentMonth: Date }> = ({ currentMonth }) => {
     }
   }, []);
 
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [deletedEvents, setDeletedEvents] = useState<string[]>([]);
 
@@ -50,19 +59,13 @@ const Cells: React.FC<{ currentMonth: Date }> = ({ currentMonth }) => {
     [eventsByDate],
   );
 
-  const clearEvent = useCallback(
-    () => dispatch({ type: ACTION_TYPES.CLEAR_EVENT }),
-    [dispatch],
-  );
-
   const toggleDialog = useCallback(() => setDialogOpen((prev) => !prev), []);
 
   const onDayClick = useCallback(
     (day: Date) => {
-      setSelectedDate(day);
       toggleDialog();
-      dispatch({ type: ACTION_TYPES.SET_SELECTED_DATE, date: day });
-      dispatch({ type: ACTION_TYPES.CLEAR_EVENT });
+      dispatch(setSelectedDate(day.toISOString()));
+      dispatch(clearEvent());
     },
     [dispatch, toggleDialog],
   );
@@ -70,20 +73,17 @@ const Cells: React.FC<{ currentMonth: Date }> = ({ currentMonth }) => {
   const onDeleteEvent = useCallback(
     (eventId: string) => {
       setDeletedEvents((prev) => [...prev, eventId]);
-      setTimeout(
-        () => dispatch({ type: ACTION_TYPES.DELETE_EVENT, id: eventId }),
-        500,
-      );
+      setTimeout(() => dispatch(deleteEvent(eventId)), 500);
     },
     [dispatch],
   );
 
-  const updateEvent = useCallback(
+  const updateEventHandler = useCallback(
     (id: string, title: string, isNew?: boolean) => {
-      dispatch({ type: ACTION_TYPES.UPDATE_EVENT, id, title, isNew });
-      dispatch({ type: ACTION_TYPES.CLEAR_EVENT });
+      dispatch(updateEvent({ id, title, isNew }));
+      dispatch(clearEvent());
     },
-    [dispatch],
+    [],
   );
 
   const calendarRows = useMemo(() => {
@@ -127,7 +127,7 @@ const Cells: React.FC<{ currentMonth: Date }> = ({ currentMonth }) => {
                 onDayClick={onDayClick}
                 onEditEvent={(event, e) => {
                   e.stopPropagation();
-                  dispatch({ type: ACTION_TYPES.SET_EVENT_TO_UPDATE, event });
+                  dispatch(setEventToUpdate(event));
                   toggleDialog();
                 }}
                 deletedEvents={deletedEvents}
@@ -140,11 +140,9 @@ const Cells: React.FC<{ currentMonth: Date }> = ({ currentMonth }) => {
       <CalendarDialog
         isDialogOpen={isDialogOpen}
         toggleDialog={toggleDialog}
-        selectedDate={selectedDate}
         onDeleteEvent={onDeleteEvent}
         eventToUpdate={eventToUpdate}
-        updateEvent={updateEvent}
-        clearEvent={clearEvent}
+        updateEvent={updateEventHandler}
       />
     </>
   );

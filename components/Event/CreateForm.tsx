@@ -1,11 +1,11 @@
 import React, { useState, useCallback } from "react";
 import { format } from "date-fns";
 
-import { ACTION_TYPES, useEvents } from "@/context/EventsContext";
-
 import { UpdateEventFormProps } from "@/typings/event";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { addEvent } from "@/store/slices/eventSlice";
+import { useDispatch } from "react-redux";
 
 interface EventFormProps {
   selectedDate: Date;
@@ -18,38 +18,32 @@ const EventForm: React.FC<EventFormProps> = ({
   updateEvent,
   toggleDialog,
 }) => {
-  const { dispatch } = useEvents();
+  const dispatch = useDispatch();
   const [eventText, setEventText] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
-  const addEvent = useCallback(
-    (date: Date, title: string) => {
-      const newEvent = {
-        id: `${new Date().toISOString()}-${title}`,
-        title,
-        date: format(date, "yyyy-MM-dd"),
-      };
+  const handleAddEvent = useCallback((date: Date, title: string) => {
+    const newEvent = {
+      id: `${new Date().toISOString()}-${title}`,
+      title,
+      date: format(date, "yyyy-MM-dd"),
+    };
 
-      dispatch({
-        type: ACTION_TYPES.ADD_EVENT,
-        event: { ...newEvent, isNew: true },
-      });
+    dispatch(addEvent({ ...newEvent, isNew: true }));
 
-      toggleDialog();
+    toggleDialog();
 
-      setTimeout(() => {
-        updateEvent(newEvent.id, title, undefined);
-      }, 1000);
-    },
-    [dispatch, toggleDialog, updateEvent],
-  );
+    setTimeout(() => {
+      updateEvent(newEvent.id, title, undefined);
+    }, 1000);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (eventText.trim()) {
       setLoading(true);
       setTimeout(() => {
-        addEvent(selectedDate, eventText);
+        handleAddEvent(selectedDate, eventText);
         setEventText("");
         setLoading(false);
       }, 500);

@@ -1,24 +1,20 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { GetServerSideProps } from "next";
-
-import {
-  ACTION_TYPES,
-  EventsProvider,
-  useEvents,
-} from "@/context/EventsContext";
-
 import Calendar from "@/components/Calender";
 import { generateRandomEvents } from "@/utils/helper";
 import { Event } from "@/typings/event";
+import { addEvent } from "@/store/slices/eventSlice";
+import { useDispatch } from "react-redux";
 
 const HomePage: React.FC<{ serverEvents: Event[] }> = ({ serverEvents }) => {
-  const { dispatch } = useEvents();
+  const dispatch = useDispatch();
+  const hasRun = useRef(false);
 
-  // Add server-side generated events to the event context when the component is mounted
   useEffect(() => {
-    serverEvents.forEach((event) =>
-      dispatch({ type: ACTION_TYPES.ADD_EVENT, event }),
-    );
+    if (!hasRun.current) {
+      serverEvents.forEach((event) => dispatch(addEvent(event)));
+      hasRun.current = true;
+    }
   }, [serverEvents, dispatch]);
 
   return (
@@ -37,10 +33,4 @@ export const getServerSideProps: GetServerSideProps = async () => {
   };
 };
 
-const HomePageWrapper = ({ serverEvents }: { serverEvents: Event[] }) => (
-  <EventsProvider>
-    <HomePage serverEvents={serverEvents} />
-  </EventsProvider>
-);
-
-export default HomePageWrapper;
+export default HomePage;

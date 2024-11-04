@@ -4,6 +4,9 @@ import { DialogTitle } from "@radix-ui/react-dialog";
 import { Dialog, DialogContent } from "@/components/ui/Dialog";
 import { Spinner } from "@/components/ui/Spinner";
 import { Event } from "@/typings/event";
+import { useDispatch, useSelector } from "react-redux";
+import { clearEvent } from "@/store/slices/eventSlice";
+import { RootState } from "@/store";
 
 const EventForm = React.lazy(() => import("@/components/Event/CreateForm"));
 const UpdateEventForm = React.lazy(
@@ -13,24 +16,24 @@ const UpdateEventForm = React.lazy(
 interface CalendarDialogProps {
   isDialogOpen: boolean;
   toggleDialog: () => void;
-  selectedDate: Date | null;
   eventToUpdate: Event | null;
   updateEvent: (id: string, title: string, isNew?: boolean) => void;
-  clearEvent: () => void;
   onDeleteEvent: (id: string) => void;
 }
 
 const CalendarDialog: React.FC<CalendarDialogProps> = ({
   isDialogOpen,
   toggleDialog,
-  selectedDate,
   eventToUpdate,
   updateEvent,
-  clearEvent,
   onDeleteEvent,
 }) => {
+  const selectedDate = useSelector(
+    (state: RootState) => state.event.selectedDate,
+  );
+  const dispatch = useDispatch();
   const handleCancel = useCallback(() => {
-    clearEvent();
+    dispatch(clearEvent());
     toggleDialog();
   }, [clearEvent, toggleDialog]);
 
@@ -41,7 +44,7 @@ const CalendarDialog: React.FC<CalendarDialogProps> = ({
         <Suspense fallback={<Spinner />}>
           {selectedDate && !eventToUpdate && (
             <EventForm
-              selectedDate={selectedDate}
+              selectedDate={new Date(selectedDate)}
               updateEvent={updateEvent}
               toggleDialog={toggleDialog}
             />
